@@ -19,44 +19,6 @@ class Dinosaur:
         self.jump_speed = self.JUMP_SPEED 
         self.dino_duck = False
 
-    def update (self, user_imput):
-        #SI EL DINO ESTA CORRIENDO ES TRUE
-        if self.dino_run:
-            self.run()
-
-        #COLOCAR A 0 STEP_INDEX CUANDO ES MAYOR A 10    
-        if self.step_index > 10:
-            self.step_index = 0
-
-        #SI EL DINO ESTA SALTANDO ES TRUE
-        if self.dino_jump:
-            self.jump() 
-        
-        if user_imput[pygame.K_UP] and not self.dino_jump: 
-            self.dino_jump = True
-            self.dino_run = False
-            self.dino_duck = False
-
-        elif not self.dino_jump:
-            self.dino_jump = False
-            self.dino_run = True
-
-        #SI EL DINO ESTA AGACHADO ES TRUE
-        if self.dino_duck:
-            self.duck()
-        
-        elif user_imput[pygame.K_DOWN] and not self.dino_jump:
-            self.dino_duck = True
-            self.dino_run = False
-            self.dino_jump = False
-
-        elif not (self.dino_jump or user_imput[pygame.K_DOWN]):
-            self.dino_run = True
-            self.dino_jump = False
-            self.dino_duck = False
-            
-            
-
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
@@ -84,4 +46,32 @@ class Dinosaur:
         self.dino_rect.y = self.Y_POS_DUCK
         self.step_index += 1
 
+    def update (self, user_imput):
+        #SI EL DINO ESTA AGACHADO ES TRUE
+        if self.dino_duck:
+            self.duck()
 
+        #SI EL DINO ESTA CORRIENDO ES TRUE
+        if self.dino_run:
+            self.run()
+
+        #SI EL DINO ESTA SALTANDO ES TRUE
+        if self.dino_jump:
+            self.jump()
+
+        #COLOCAR A 0 STEP_INDEX CUANDO ES MAYOR A 10    
+        if self.step_index > 10:
+            self.step_index = 0        
+        
+        if user_imput[pygame.K_UP] and not self.dino_jump: 
+            self.dino_jump = True
+            self.dino_run = False
+            self.dino_duck = False
+        elif user_imput[pygame.K_DOWN] and not self.dino_jump:
+            self.dino_duck = True
+            self.dino_run = False
+            self.dino_jump = False
+        elif not (self.dino_jump or user_imput[pygame.K_DOWN]):
+            self.dino_run = True
+            self.dino_jump = False
+            self.dino_duck = False
