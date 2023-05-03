@@ -8,6 +8,7 @@ from dino_runner.components.counter import Counter
 
 class Game:
     GAME_SPEED = 20
+    DEATHS = 0
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -20,9 +21,11 @@ class Game:
         self.y_pos_bg = 380
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
-        self.menu = Menu(self.screen, "Please press any key to start...")
+        self.menu = Menu(self.screen)
         self.running = False
         self.score = Counter()
+        self.death_count = Counter()
+        self.highest_score = Counter()
 
     def execute(self):
         self.running = True
@@ -48,6 +51,10 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
+#Aqui modifique
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.game_over:
+                    self.__init__()
 
     def update(self):
         user_imput = pygame.key.get_pressed()
@@ -79,15 +86,30 @@ class Game:
         half_screen_width = SCREEN_WIDTH // 2
         half_screen_height = SCREEN_HEIGHT // 2
         self.screen.blit(ICON,(half_screen_width - 50, half_screen_height - 140))
-        self.menu.draw(self.screen)
+        if self.death_count == 0:
+            self.menu.draw(self.screen, "Pess any key to start..")
+
+        else:
+            self.update_higest_score()
+            self.menu.draw(self.screen, "---GAME OVER---")    
+            self.menu.draw(self.screen, f"Score: {self.score.count}", half_screen_width, 350)
+            self.menu.draw(self.screen, f"Deaths: {self.death_count.count}", half_screen_width, 400)
+            self.menu.draw(self.screen, f"Higest Score: {self.highest_score.count}", half_screen_width, 450)
+
         self.menu.update(self)
+    
+        #self.menu.draw(self.screen)
+        #self.menu.update(self)    
         
     def update_score(self):
         self.score.update()
         if self.score.count % 100 == 0 and self.game_speed < 500:
             self.game_speed += 5 
 
-       # print(f"Score: {self.score}, Speed: {self.game_speed}")
+       # print(f"Score: {self.score}, Speed: {self.game_speed}"
+    def update_higest_score(self):
+        if self.score.count > self.highest_score.count:
+            self.highest_score.set_count(self.score.count)
 
     def reset_game(self):
         self.obstacle_manager.reset_obstacles()

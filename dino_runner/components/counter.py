@@ -2,6 +2,7 @@ import pygame
 from dino_runner.utils.constants import FONT_STYLE
 
 class Counter:
+    
     def __init__(self):
         self.count = 0
 
