@@ -9,7 +9,6 @@ from dino_runner.components.powerups.powerup_manager import PowerupManager
 
 class Game:
     GAME_SPEED = 20
-    DEATHS = 0
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)

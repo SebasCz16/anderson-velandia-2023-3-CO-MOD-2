@@ -39,9 +39,7 @@ class Menu:
             if event.type == pygame.QUIT:
                 game.running = False
                 game.playing = False
-                death += 1
-                print(f"Numero de muertes {death}")
-                
+                death += 1                
             elif event.type == pygame.KEYDOWN:
                 game.run()
 

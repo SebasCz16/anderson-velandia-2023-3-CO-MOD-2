@@ -1,15 +1,14 @@
 import pygame
 
 from pygame.sprite import Sprite
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD
+from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, HAMMER_TYPE, RUNNING_HAMMER, JUMPING_HAMMER, DUCKING_HAMMER 
 
 
-RUN_IMAGE = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD}
-DUCK_IMAGE = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
-JUMP_IMAGE = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD}
+RUN_IMAGE = {DEFAULT_TYPE: RUNNING, SHIELD_TYPE: RUNNING_SHIELD, HAMMER_TYPE: RUNNING_HAMMER}
+DUCK_IMAGE = {DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD, HAMMER_TYPE: DUCKING_HAMMER}
+JUMP_IMAGE = {DEFAULT_TYPE: JUMPING, SHIELD_TYPE: JUMPING_SHIELD, HAMMER_TYPE: JUMPING_HAMMER}
     
 class Dinosaur:
-    deaths = 0
     Y_POS_DUCK = 340
     X_POS = 80
     Y_POS = 310
@@ -42,7 +41,7 @@ class Dinosaur:
         self.step_index += 1
 
     def jump(self):
-     #  self.image = JUMPING 
+     #  self.image = JUMPING  
         self.image = JUMP_IMAGE[self.type]
         #EN EL EJE Y
         self.dino_rect.y -= self.jump_speed*4
@@ -75,18 +74,18 @@ class Dinosaur:
             self.duck()
 
         #SI EL DINO ESTA CORRIENDO ES TRUE
-        if self.dino_run:
+        elif self.dino_run:
             self.run()
 
         #SI EL DINO ESTA SALTANDO ES TRUE
-        if self.dino_jump:
+        elif self.dino_jump:
             self.jump()
 
         #COLOCAR A 0 STEP_INDEX CUANDO ES MAYOR A 10    
         if self.step_index > 9:
             self.step_index = 0        
         
-        if user_imput[pygame.K_SPACE and pygame.K_UP] and not self.dino_jump: 
+        if user_imput[pygame.K_UP] and not self.dino_jump: 
             self.dino_jump = True
             self.dino_run = False
             self.dino_duck = False
@@ -98,4 +97,7 @@ class Dinosaur:
             self.dino_run = True
             self.dino_jump = False
             self.dino_duck = False
+
+        #elif user_imput[pygame.K_SPACE]:
+         #   self.dino_launch()
 
