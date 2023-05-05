@@ -2,7 +2,7 @@ import random
 import pygame
 from dino_runner.components.cactus import SmallCactus, LargeCactus
 from dino_runner.components.obstacles.bird import Bird_High, Bird_Low, Bird_Half
-from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD, SHIELD_TYPE
+from dino_runner.utils.constants import SMALL_CACTUS, LARGE_CACTUS, BIRD, SHIELD_TYPE, HAMMER_TYPE
 
 class ObstacleManager:
     def __init__ (self):
@@ -44,6 +44,16 @@ class ObstacleManager:
                 
                 else:
                     self.obstacles.remove(obstacle)
+
+            '''if game.player.dino_rect.colliderect(obstacle.rect):
+                #controlando si el dino tiene hammer
+                if game.player.type != HAMMER_TYPE:
+                    game.playing = False
+                    game.death_count.update()
+                    break
+                else:
+                    self.obstacles.remove(obstacle)'''
+
 
 
     def draw (self, screen):

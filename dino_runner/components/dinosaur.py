@@ -1,6 +1,7 @@
 import pygame
 
 from pygame.sprite import Sprite
+from dino_runner.components import game
 from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE, SHIELD_TYPE, RUNNING_SHIELD, JUMPING_SHIELD, DUCKING_SHIELD, HAMMER_TYPE, RUNNING_HAMMER, JUMPING_HAMMER, DUCKING_HAMMER 
 
 
@@ -28,6 +29,8 @@ class Dinosaur:
         self.image = RUN_IMAGE[self.type][0]
         self.has_power_up = False
         self.power_up_time = 0
+        #self.launch = False
+        
 
     def draw(self, screen):
         screen.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
@@ -64,11 +67,11 @@ class Dinosaur:
         self.dino_rect.y = self.Y_POS
         self.dino_run = True
         self.step_index = 0
-        self.dino_jump = False
+        self.dino_jump = False  
         self.jump_speed = self.JUMP_SPEED 
         self.dino_duck = False
 
-    def update (self, user_imput):
+    def update (self, user_imput, game):
         #SI EL DINO ESTA AGACHADO ES TRUE
         if self.dino_duck:
             self.duck()
@@ -98,6 +101,10 @@ class Dinosaur:
             self.dino_jump = False
             self.dino_duck = False
 
-        #elif user_imput[pygame.K_SPACE]:
-         #   self.dino_launch()
+        elif user_imput[pygame.K_SPACE] and self.type == HAMMER_TYPE:
+            game.yes_launch = True
+            game.hammer.rect.x = self.dino_rect.x 
+            game.hammer.rect.y = self.dino_rect.y
+            self.type = DEFAULT_TYPE
+            
 

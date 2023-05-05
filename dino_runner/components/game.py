@@ -1,10 +1,11 @@
 import pygame
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, SHIELD_TYPE, HAMMER_TYPE
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.components.menu import Menu
 from dino_runner.components.counter import Counter
 from dino_runner.components.powerups.powerup_manager import PowerupManager
+from dino_runner.components.powerups.laucnh_hammer import LaucnhHummer
 
 
 class Game:
@@ -27,6 +28,8 @@ class Game:
         self.death_count = Counter()
         self.highest_score = Counter()
         self.powerup_manager = PowerupManager()
+        self.yes_launch = False
+        self.hammer = LaucnhHummer()
 
     def execute(self):
         self.running = True
@@ -52,17 +55,15 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
-#Aqui modifique
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.game_over:
-                    self.__init__()
 
     def update(self):
         user_imput = pygame.key.get_pressed()
-        self.player.update(user_imput)
+        self.player.update(user_imput, self)
         self.obstacle_manager.update(self)
         self.update_score()
         self.powerup_manager.update(self)
+        if self.yes_launch:
+            self.hammer.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -73,6 +74,8 @@ class Game:
         self.score.draw(self.screen)
         self.powerup_manager.draw(self.screen)
         self.power_up()
+        if self.yes_launch:
+            self.hammer.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -122,7 +125,7 @@ class Game:
         self.player.reset()
 
     def power_up(self):
-        if self.player.has_power_up:
+        if self.player.type == SHIELD_TYPE:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks())/1000, 2)
             if time_to_show >= 0:
                 self.menu.draw(self.screen, f"{self.player.type.capitalize()} enabled for {time_to_show} seconds", 500, 50)
